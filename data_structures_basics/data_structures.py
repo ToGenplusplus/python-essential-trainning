@@ -17,6 +17,10 @@ print(my_list)
 item_at_index_2 = my_list.pop(2) # removes and returns the item and the specified index
 print(my_list)
 print(item_at_index_2)
+my_list.reverse()
+print(my_list)
+print(my_list.sort())
+print(my_list.sort(reverse=True))
 my_list.clear() # removes all elements in list
 print(my_list)
 
