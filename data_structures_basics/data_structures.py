@@ -1,0 +1,43 @@
+# list methods
+print("list actions\n")
+my_list = []
+my_list.append(1) # adds to the list
+print(my_list)
+my_list.clear() # removes all elements in list
+print(my_list)
+my_list.insert(0,33) # inserts element at specified index
+print(my_list)
+my_list.insert(0,22)
+print(my_list)
+copy_of_my_list = my_list.copy() #returns a shallow copy of list
+print(copy_of_my_list)
+print(my_list.count(1)) #returns the number of occurenes of the value passed in
+
+print("set actions\n")
+# set methods
+my_set = {1, 2, 3}
+my_set.add(4) #adds an element to the set
+print(my_set)
+value = my_set.pop() # removes and returns a random element from the set
+print(value)
+my_set.update([5,6,7]) # update the set with the union of itself and the elements passed in
+print(my_set)
+my_set.discard(3) # removes an element from a set if the element exists
+print(my_set)
+intersect = my_set.intersection({7,8,9}) # returns the elements that are shared by both sets
+print(intersect)
+my_set.difference({2, 3, 4}) # returns the elements in my_set that are not in the iterable passed in
+print(my_set)
+
+print("tuple actions\n")
+# tuple methods 
+my_tuple = (1,2,3)
+print(my_tuple.index(3)) # returns the first position in the tuple of the value 
+
+print("dict actions\n")
+#dict methods
+my_dict = {'hello' : 'world', 'boolean': True}
+print(my_dict.get('hello', 'default world')) # returns the value for key if present else default value passed in 
+new_dict = my_dict.fromkeys(['first', 'second', 'third'], False)
+print(new_dict)
+print(my_dict.items()) # returns a set like object containing the dictionarys items
