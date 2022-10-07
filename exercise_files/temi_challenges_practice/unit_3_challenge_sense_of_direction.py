@@ -2,6 +2,10 @@ import os
 import time
 from termcolor import colored
 
+# Objective for this challenge, add a direction attribute so the terminal knows which way it is pointing
+# create a function called forward that moves the pointer in that direction.
+# the pointer should be able to move in any direction between 0 and 180 degrees.
+
 # This is the Canvas class. It defines some height and width, and a 
 # matrix of characters to keep track of where the TerminalScribes are moving
 class Canvas:
@@ -77,17 +81,4 @@ canvas = Canvas(30, 30)
 scribe = TerminalScribe(canvas)
 
 # Draw a small square
-scribe.right()
-scribe.right()
-scribe.right()
-scribe.down()
-scribe.down()
-scribe.down()
-scribe.left()
-scribe.left()
-scribe.left()
-scribe.up()
-scribe.up()
-scribe.up()
-
 
