@@ -1,3 +1,4 @@
+from codecs import namereplace_errors
 import os
 import time
 import math
@@ -94,7 +95,7 @@ class TerminalScribe:
 class TerminalScribeStorm:
 
     def __init__(self, number_of_scribes) -> None:
-        self.my_scribes = []
+        self.scribes_definitions = []
         self.scribe_number = number_of_scribes
         self.__generateScribeDefinitions()
         pass
@@ -103,37 +104,60 @@ class TerminalScribeStorm:
         randnames = [f"Scribe-{names.get_first_name()}" for _ in range(self.scribe_number)]
 
         scribesList = []
-        for i in range(self.scribe_number):
+        for i in range(1,self.scribe_number):
             scribesList.append({'name':randnames[i], 'direction': round(180/i), 'movements':[('forward','5')]})
-        self.my_scribes =[scribesList]
+        self.scribes_definitions =[scribesList]
 
-
-    def generateScribes(self, direction):
+    def __generateScribe(self, direction):
         aScribe = TerminalScribe(Canvas(30,30))
         aScribe.setDegrees(direction)
         return aScribe
 
-    def activateMovement(self, scribe: TerminalScribe, movementData: tuple):
-        match movementData[0]:
-            case 'forward':
-                for _ in range(int(movementData[1])):
-                    scribe.forward()
-            case 'up':
-                for _ in range(int(movementData[1])):
-                    scribe.up()
-            case 'down':
-                for _ in range(int(movementData[1])):
-                    scribe.down()
-            case 'right':
-                for _ in range(int(movementData[1])):
-                    scribe.right()
-            case 'left':
-                for _ in range(int(movementData[1])):
-                    scribe.left()
+    def __printScribeInfo(self, scribeDefinition: dict):
+        name = scribeDefinition["name"]
+        direction = scribeDefinition["direction"]
+        movements = scribeDefinition["movements"]
+        print(colored(f"Scribe name: {name}","green",attrs=["bold"]))
+        print(colored(f"Scribe direction: {direction}","green",attrs=["bold"]))
+        print(colored(f"Scribe movements: {movements}","green",attrs=["bold"]))
+        pass
 
-canvas = Canvas(30, 30)
-scribe = TerminalScribe(canvas)
-scribe.setDegrees(135)
-for i in range(30):
-    scribe.forward()
+    def __activateScribeMovements(self, scribe: TerminalScribe, movementData: list[tuple]):
+        for movement in movementData:
+            match movement[0]:
+                case 'forward':
+                    for _ in range(int(movement[1])):
+                        scribe.forward()
+                case 'up':
+                    for _ in range(int(movement[1])):
+                        scribe.up()
+                case 'down':
+                    for _ in range(int(movement[1])):
+                        scribe.down()
+                case 'right':
+                    for _ in range(int(movement[1])):
+                        scribe.right()
+                case 'left':
+                    for _ in range(int(movement[1])):
+                        scribe.left()
 
+    def stormTheTerminal(self):
+        for definition in self.scribes_definitions:
+            scribeFromDefinition = self.__generateScribe(definition["direction"])
+            self.__printScribeInfo(definition)
+            self.__activateScribeMovements(scribeFromDefinition, definition["movements"])
+            print("\n")
+
+
+# canvas = Canvas(30, 30)
+# scribe = TerminalScribe(canvas)
+# scribe.setDegrees(135)
+# for i in range(30):
+#     scribe.forward()
+
+def main():
+    scribeStorm = TerminalScribeStorm(2)
+    scribeStorm.stormTheTerminal()
+
+if __name__ == '__main__':
+    main()
