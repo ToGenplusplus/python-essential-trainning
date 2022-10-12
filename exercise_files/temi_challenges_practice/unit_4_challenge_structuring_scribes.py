@@ -1,0 +1,139 @@
+import os
+import time
+import math
+import names
+from termcolor import colored
+
+#Objective:
+# - create a data structure that holds information about each scribe (starting positions, directions, names, movements)
+# - write a function that creates and moves scribes based on this data structure
+# 
+
+
+
+class Canvas:
+    def __init__(self, width, height):
+        self._x = width
+        self._y = height
+        self._canvas = [[' ' for y in range(self._y)] for x in range(self._x)]
+
+    def hitsWall(self, point):
+        return round(point[0]) < 0 or round(point[0]) >= self._x or round(point[1]) < 0 or round(point[1]) >= self._y
+
+    def setPos(self, pos, mark):
+        self._canvas[round(pos[0])][round(pos[1])] = mark
+
+    def clear(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
+
+    def print(self):
+        self.clear()
+        for y in range(self._y):
+            print(' '.join([col[y] for col in self._canvas]))
+
+class TerminalScribe:
+    def __init__(self, canvas):
+        self.canvas = canvas
+        self.trail = '.'
+        self.mark = '*'
+        self.framerate = 0.05
+        self.pos = [0, 0]
+
+        self.direction = [0, 1]
+
+    def setDegrees(self, degrees):
+        radians = (degrees/180) * math.pi 
+        self.direction = [math.sin(radians), -math.cos(radians)]
+
+    def up(self):
+        self.direction = [0, -1]
+        self.forward()
+
+    def down(self):
+        self.direction = [0, 1]
+        self.forward()
+
+    def right(self):
+        self.direction = [1, 0]
+        self.forward()
+
+    def left(self):
+        self.direction = [-1, 0]
+        self.forward()
+
+    def forward(self):
+        pos = [self.pos[0] + self.direction[0], self.pos[1] + self.direction[1]]
+        if not self.canvas.hitsWall(pos):
+            self.draw(pos)
+
+    def drawSquare(self, size):
+        for i in range(size):
+            self.right()
+        for i in range(size):
+            self.down()
+        for i in range(size):
+            self.left()
+        for i in range(size):
+            self.up()
+
+    def draw(self, pos):
+        self.canvas.setPos(self.pos, self.trail)
+        self.pos = pos
+        self.canvas.setPos(self.pos, colored(self.mark, 'red'))
+        self.canvas.print()
+        time.sleep(self.framerate)
+
+# class TerminalScribeStorm
+# attributes: # of scribes to create
+# dictionary attributes:
+# name: string
+# direction: int
+# movments: tuple
+# [{name: direction: , canvas: , starting_pos, movements }]
+# TODO we want to print the scribe name, direction and its movements and then activate its movements - figure out how to accomplish this
+class TerminalScribeStorm:
+
+    def __init__(self, number_of_scribes) -> None:
+        self.my_scribes = []
+        self.scribe_number = number_of_scribes
+        self.__generateScribeDefinitions()
+        pass
+
+    def __generateScribeDefinitions(self):
+        randnames = [f"Scribe-{names.get_first_name()}" for _ in range(self.scribe_number)]
+
+        scribesList = []
+        for i in range(self.scribe_number):
+            scribesList.append({'name':randnames[i], 'direction': round(180/i), 'movements':[('forward','5')]})
+        self.my_scribes =[scribesList]
+
+
+    def generateScribes(self, direction):
+        aScribe = TerminalScribe(Canvas(30,30))
+        aScribe.setDegrees(direction)
+        return aScribe
+
+    def activateMovement(self, scribe: TerminalScribe, movementData: tuple):
+        match movementData[0]:
+            case 'forward':
+                for _ in range(int(movementData[1])):
+                    scribe.forward()
+            case 'up':
+                for _ in range(int(movementData[1])):
+                    scribe.up()
+            case 'down':
+                for _ in range(int(movementData[1])):
+                    scribe.down()
+            case 'right':
+                for _ in range(int(movementData[1])):
+                    scribe.right()
+            case 'left':
+                for _ in range(int(movementData[1])):
+                    scribe.left()
+
+canvas = Canvas(30, 30)
+scribe = TerminalScribe(canvas)
+scribe.setDegrees(135)
+for i in range(30):
+    scribe.forward()
+
