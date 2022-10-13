@@ -84,31 +84,18 @@ class TerminalScribe:
         self.canvas.print()
         time.sleep(self.framerate)
 
-# class TerminalScribeStorm
-# attributes: # of scribes to create
-# dictionary attributes:
-# name: string
-# direction: int
-# movments: tuple
-# [{name: direction: , canvas: , starting_pos, movements }]
-# TODO we want to print the scribe name, direction and its movements and then activate its movements - figure out how to accomplish this
 class TerminalScribeStorm:
 
     def __init__(self, number_of_scribes) -> None:
-        self.scribes_definitions = []
+        self.scribes_definitions: list[dict] 
         self.scribe_number = number_of_scribes
         self.__generateScribeDefinitions()
         pass
 
     def __generateScribeDefinitions(self):
-        randnames = [f"Scribe-{names.get_first_name()}" for _ in range(self.scribe_number)]
+        self.scribes_definitions = [{'name':f"Scribe-{names.get_first_name()}", 'direction': round(180/i), 'movements':[('forward','5')]} for i in range(1, self.scribe_number + 1)]
 
-        scribesList = []
-        for i in range(1,self.scribe_number):
-            scribesList.append({'name':randnames[i], 'direction': round(180/i), 'movements':[('forward','5')]})
-        self.scribes_definitions =[scribesList]
-
-    def __generateScribe(self, direction):
+    def __generateScribe(self, direction: int):
         aScribe = TerminalScribe(Canvas(30,30))
         aScribe.setDegrees(direction)
         return aScribe
@@ -120,7 +107,6 @@ class TerminalScribeStorm:
         print(colored(f"Scribe name: {name}","green",attrs=["bold"]))
         print(colored(f"Scribe direction: {direction}","green",attrs=["bold"]))
         print(colored(f"Scribe movements: {movements}","green",attrs=["bold"]))
-        pass
 
     def __activateScribeMovements(self, scribe: TerminalScribe, movementData: list[tuple]):
         for movement in movementData:
@@ -143,7 +129,7 @@ class TerminalScribeStorm:
 
     def stormTheTerminal(self):
         for definition in self.scribes_definitions:
-            scribeFromDefinition = self.__generateScribe(definition["direction"])
+            scribeFromDefinition = self.__generateScribe(definition.get("direction",0))
             self.__printScribeInfo(definition)
             self.__activateScribeMovements(scribeFromDefinition, definition["movements"])
             print("\n")
